@@ -8,19 +8,18 @@ import sklearn
 ps=PorterStemmer()
 import os
 
-# Set a specific directory for NLTK data
+# Set an explicit download directory for nltk
 nltk_data_dir = os.path.join(os.getcwd(), "nltk_data")
 if not os.path.exists(nltk_data_dir):
     os.makedirs(nltk_data_dir)
 
 nltk.data.path.append(nltk_data_dir)
 
-# Force download 'punkt' tokenizer
+# Force download 'punkt' and 'stopwords'
 nltk.download('punkt', download_dir=nltk_data_dir)
 nltk.download('stopwords', download_dir=nltk_data_dir)
 
 from nltk.tokenize import word_tokenize
-
 from nltk.corpus import stopwords
 
 def transform(text):
