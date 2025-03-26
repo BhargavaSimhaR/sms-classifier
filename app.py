@@ -14,42 +14,31 @@ ps=PorterStemmer()
 
 def transform(text):
     text = text.lower()
-    text = nltk.word_tokenize(text)
-    y = []
-    for i in text:
-        if i.isalnum():
-            y.append(i)
+    text = word_tokenize(text)  # Use word_tokenize from nltk.tokenize
 
-    text = y[:]
-    y.clear()
+    y = [i for i in text if i.isalnum()]  # Remove special characters
 
-    for i in text:
-        if i not in stopwords.words('english') and i not in string.punctuation:
-            y.append(i)
+    # Remove stopwords and punctuation
+    y = [i for i in y if i not in stopwords.words('english') and i not in string.punctuation]
 
-    text = y[:]
-    y.clear()
-
-    for i in text:
-        y.append(ps.stem(i))
+    # Apply stemming
+    y = [ps.stem(i) for i in y]
 
     return " ".join(y)
 
-cv=pickle.load(open('vectorizer.pkl','rb'))
-model=pickle.load(open('model.pkl','rb'))
+# Load pre-trained models
+cv = pickle.load(open('vectorizer.pkl', 'rb'))
+model = pickle.load(open('model.pkl', 'rb'))
 
-st.title("Email/SMS Spam detection")
-input_msg=st.text_input("Enter the message")
+st.title("Email/SMS Spam Detection")
+input_msg = st.text_input("Enter the message")
 
 if st.button('Check'):
+    transformed_msg = transform(input_msg)
+    vector_inp = cv.transform([transformed_msg])
+    res = model.predict(vector_inp)[0]
 
-    transformed_msg=transform(input_msg)
-
-    vector_inp=cv.transform([transformed_msg])
-
-    res=model.predict(vector_inp)[0]
-
-    if res==1:
+    if res == 1:
         st.header("Spam")
     else:
         st.header("Not Spam")
