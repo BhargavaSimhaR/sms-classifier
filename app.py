@@ -7,10 +7,10 @@ from nltk.stem import PorterStemmer
 import sklearn
 
 ps=PorterStemmer()
-nltk.download('punkt')
-nltk.download('stopwords')
 
 def transform(text):
+    nltk.download('punkt')
+    nltk.download('stopwords')
     text = text.lower()
     text = nltk.word_tokenize(text)
     y = []
