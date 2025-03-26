@@ -1,15 +1,27 @@
 import streamlit as st
 import pickle
 import nltk
-from nltk.corpus import stopwords
 import string
 from nltk.stem import PorterStemmer
 import sklearn
 
 ps=PorterStemmer()
-# Manually download the 'punkt' tokenizer if it's missing
-nltk.download('punkt')
+import os
+
+# Set a specific directory for NLTK data
+nltk_data_dir = os.path.join(os.getcwd(), "nltk_data")
+if not os.path.exists(nltk_data_dir):
+    os.makedirs(nltk_data_dir)
+
+nltk.data.path.append(nltk_data_dir)
+
+# Force download 'punkt' tokenizer
+nltk.download('punkt', download_dir=nltk_data_dir)
+nltk.download('stopwords', download_dir=nltk_data_dir)
+
 from nltk.tokenize import word_tokenize
+
+from nltk.corpus import stopwords
 
 def transform(text):
     text = text.lower()
